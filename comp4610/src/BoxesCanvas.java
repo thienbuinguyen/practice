@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class BoxesCanvas extends JComponent {
@@ -14,7 +17,7 @@ public class BoxesCanvas extends JComponent {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+				super.paintComponent(g);
 		Dimension dim = this.getSize();
 
 		// fill the background
