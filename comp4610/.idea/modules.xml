@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/comp4610.iml" filepath="$PROJECT_DIR$/comp4610.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jogl/jogl.iml" filepath="$PROJECT_DIR$/jogl/jogl.iml" />
     </modules>
   </component>
 </project>
