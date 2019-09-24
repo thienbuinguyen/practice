@@ -47,6 +47,8 @@ public class StarWarsCrawl implements GLEventListener {
     FPSAnimator animator;
     TextRenderer renderer;
 
+    float maxTexLen = 0;
+
     float ypos;
     float yvel;
 
@@ -93,19 +95,39 @@ public class StarWarsCrawl implements GLEventListener {
         // clear the screen
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 
-        if ((ypos - txt.length * textVertGap) - fontSize < dr.getSurfaceHeight()) {
-            // draw red text at (xpos,300) on the screen
-            renderer.beginRendering(dr.getSurfaceWidth(), dr.getSurfaceHeight());
-            renderer.setColor(Color.yellow);
+        final float height = 100f;
+        float scaleFactor = dim.width / maxTexLen;
 
-            for (int i = 0; i < txt.length; i++) {
-                Rectangle2D r = renderer.getBounds(txt[i]);
-                renderer.draw(txt[i], (int) ((dr.getSurfaceWidth() - r.getWidth()) / 2), (int) (ypos - i * textVertGap) - fontSize);
-            }
-
-            ypos += yvel;
-            renderer.flush();
+        gl.glColor3f(1, 1,0);
+        for (int i = 0; i < txt.length; i++) {
+            float len = glut.glutStrokeLengthf(GLUT.STROKE_ROMAN, txt[i]);
+            float newWidth = scaleFactor * len;
+            float newHeight = scaleFactor * height;
+            gl.glPushMatrix();
+            gl.glTranslatef((dim.width - newWidth) / 2, (ypos - i * (newHeight * 3f)) - newHeight, 0);
+            gl.glScalef(scaleFactor, scaleFactor, 0);
+            glut.glutStrokeString(GLUT.STROKE_ROMAN, txt[i]);
+            gl.glPopMatrix();
         }
+
+        ypos += yvel;
+        gl.glFlush();
+
+//        if ((ypos - txt.length * textVertGap) - fontSize < dr.getSurfaceHeight()) {
+//            // draw red text at (xpos,300) on the screen
+//            renderer.beginRendering(dr.getSurfaceWidth(), dr.getSurfaceHeight());
+//            renderer.setColor(Color.yellow);
+//
+//            for (int i = 0; i < txt.length; i++) {
+//                Rectangle2D r = renderer.getBounds(txt[i]);
+//                renderer.draw(txt[i], (int) ((dr.getSurfaceWidth() - r.getWidth()) / 2), (int) (ypos - i * textVertGap) - fontSize);
+//            }
+//
+//            ypos += yvel;
+//            renderer.flush();
+//        }
+
+//        gl.glFlush();
     }
 
     public void displayChanged(GLAutoDrawable dr, boolean arg1, boolean arg2) {
@@ -119,6 +141,11 @@ public class StarWarsCrawl implements GLEventListener {
         GLUT glut = new GLUT();
         // make the clear colour black
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+        for (String s : txt) {
+            float len = glut.glutStrokeLengthf(GLUT.STROKE_ROMAN, s);
+            if (len > maxTexLen) maxTexLen = len;
+        }
 
 
         // set the projection matrix to a simple Orthogonal 2D mapping
